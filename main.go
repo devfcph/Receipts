@@ -21,5 +21,6 @@ func main() {
 	//Get points
 	router.GET(config.GetDefaultEndPoint()+"/:id/points", receiptController.GetPointsById)
 
+	//Run
 	router.Run(config.GetServer())
 }
