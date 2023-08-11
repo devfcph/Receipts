@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"ReceiptProcessor/constants"
 	"ReceiptProcessor/models"
 	"fmt"
 	"math"
@@ -34,11 +35,11 @@ func getPointsByTotal(total string) int64 {
 	if totalParsed, err := strconv.ParseFloat(total, 64); err == nil {
 		fmt.Println(totalParsed)
 		if math.Ceil(totalParsed) == totalParsed {
-			points = int64(50)
+			points = int64(constants.FIFTY)
 		}
 
-		if isMultipleOf(totalParsed, 0.25) {
-			points = points + int64(25)
+		if isMultipleOf(totalParsed, constants.ONEQUARTER) {
+			points = points + int64(constants.TWENTYFIVE)
 		}
 	}
 
@@ -73,15 +74,15 @@ func getPointsByPurchaseInfo(date string, time string) int64 {
 
 func getPointsByItemDescription(item models.ReceiptItem) int64 {
 	points := int64(0)
-	factor := 0.2
+	factor := constants.ONEFIFTH
 	println(len(strings.TrimSpace(item.ShortDescription)))
 
-	if isMultipleOf(float64(len(strings.TrimSpace(item.ShortDescription))), 3) {
+	if isMultipleOf(float64(len(strings.TrimSpace(item.ShortDescription))), float64(constants.THREE)) {
 
 		if price, err := strconv.ParseFloat(item.Price, 64); err == nil {
-			auxiliarResult := (factor * price)
-			decimals := auxiliarResult - math.Round(auxiliarResult)
-			_points := int64(math.Round(auxiliarResult))
+			aux := factor * price
+			decimals := aux - math.Round(aux)
+			_points := int64(math.Round(aux))
 			if decimals < 0.5 {
 				points = _points + 1
 			}
@@ -93,7 +94,7 @@ func getPointsByItemDescription(item models.ReceiptItem) int64 {
 }
 
 func getPointsByNumberOfItems(totalItems int) int64 {
-	return int64((totalItems / 2) * 5)
+	return int64((totalItems / 2) * constants.FIVE)
 }
 
 func isMultipleOf(number float64, multipleOf float64) bool {
@@ -114,8 +115,6 @@ func isHourValue(timeString string) bool {
 	purchaseTime := strings.Split(timeString, ":")
 	if hour, err := strconv.Atoi(purchaseTime[0]); err == nil {
 		if minute, err := strconv.Atoi(purchaseTime[1]); err == nil {
-			println("Hora: " + string(hour))
-			println("Minuto: " + string(minute))
 			isValid = (hour >= 0 && hour < 24) && (minute >= 0 && minute < 60)
 		}
 	}
@@ -131,7 +130,7 @@ func getPointsByDayFromDateString(date string) int64 {
 		*/
 		if dateParsed.Day()%2 == 1 {
 			fmt.Println(dateParsed.Day(), "is Odd number")
-			points = int64(6)
+			points = int64(constants.SIX)
 		}
 	}
 
@@ -143,14 +142,13 @@ func getPointsByPurchaseTime(purchaseTime string) int64 {
 	/*
 		10 points if the time of purchase is after 2:00pm and before 4:00pm.
 	*/
-	time := strings.Split(purchaseTime, ":")
+	timeSplit := strings.Split(purchaseTime, ":")
 
-	if hour, err := strconv.Atoi(time[0]); err == nil {
-		if minute, err := strconv.Atoi(time[1]); err == nil {
-			println("Hora: " + string(hour))
-			println("Minuto: " + string(minute))
+	if hour, err := strconv.Atoi(timeSplit[0]); err == nil {
+		if minute, err := strconv.Atoi(timeSplit[1]); err == nil {
+
 			if (hour >= 14 && hour <= 15) && (minute >= 0 && minute < 60) {
-				points = int64(10)
+				points = int64(constants.TEN)
 			}
 		}
 	}
