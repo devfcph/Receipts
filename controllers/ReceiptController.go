@@ -49,6 +49,7 @@ func (controller ReceiptController) ProcessReceipt(context *gin.Context) {
 	var newReceipt models.Receipt
 	var newReciptGuid models.ReceiptID
 
+	// Bind the JSON request body to the newReceipt struct
 	if err := context.ShouldBindJSON(&newReceipt); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "The receipt is invalid.  [ " + err.Error() + " ]"})
 		return
