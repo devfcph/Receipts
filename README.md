@@ -1,4 +1,4 @@
-Absolutely, I'd be happy to guide you through the process of running the Dockerized Go application on your new environment. Here are the steps:
+How to run application:
 
 1. **Install Docker**:
 
@@ -9,7 +9,7 @@ Absolutely, I'd be happy to guide you through the process of running the Dockeri
    Open a terminal and navigate to a directory where you want to store your projects. Clone the project repository from wherever it's hosted (GitHub, GitLab, etc.) using a command like:
 
    ```sh
-   git clone <repository-url>
+   git clone [<repository-url>](https://github.com/devfcph/Receipts)
    ```
 
 3. **Navigate to Project Directory**:
