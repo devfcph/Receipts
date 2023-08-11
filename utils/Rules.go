@@ -3,7 +3,6 @@ package utils
 import (
 	"ReceiptProcessor/constants"
 	"ReceiptProcessor/models"
-	"fmt"
 	"math"
 	"strconv"
 	"strings"
@@ -14,7 +13,10 @@ import (
 // CalculateReceiptPoints calculates the total points earned from a receipt.
 func CalculateReceiptPoints(receipt *models.Receipt) int64 {
 	totalPoints := int64(0)
-	totalPoints = getPointsByRetailerName(receipt.Retailer) + getPointsByTotal(receipt.Total) + getPointsByReceiptItems(receipt) + getPointsByPurchaseInfo(receipt.PurchaseDate, receipt.PurchaseTime)
+	totalPoints += getPointsByRetailerName(receipt.Retailer)
+	totalPoints += getPointsByTotal(receipt.Total)
+	totalPoints += getPointsByReceiptItems(receipt)
+	totalPoints += getPointsByPurchaseInfo(receipt.PurchaseDate, receipt.PurchaseTime)
 	return totalPoints
 }
 
@@ -35,15 +37,17 @@ func getPointsByTotal(total string) int64 {
 
 	points := int64(0)
 
-	if totalParsed, err := strconv.ParseFloat(total, 64); err == nil {
-		fmt.Println(totalParsed)
-		if math.Ceil(totalParsed) == totalParsed {
-			points = int64(constants.FIFTY)
-		}
+	totalParsed, err := strconv.ParseFloat(total, 64)
+	if err != nil {
+		return points
+	}
 
-		if isMultipleOf(totalParsed, constants.ONEQUARTER) {
-			points = points + int64(constants.TWENTYFIVE)
-		}
+	if math.Ceil(totalParsed) == totalParsed {
+		points += int64(constants.FIFTY)
+	}
+
+	if isMultipleOf(totalParsed, constants.ONEQUARTER) {
+		points += int64(constants.TWENTYFIVE)
 	}
 
 	return points
@@ -53,11 +57,10 @@ func getPointsByTotal(total string) int64 {
 func getPointsByReceiptItems(receipt *models.Receipt) int64 {
 	points := int64(0)
 
-	println(getPointsByNumberOfItems(len(receipt.Items)))
-	points = points + getPointsByNumberOfItems(len(receipt.Items))
+	points += getPointsByNumberOfItems(len(receipt.Items))
 
 	for _, item := range receipt.Items {
-		points = points + getPointsByItemDescription(item)
+		points += getPointsByItemDescription(item)
 	}
 
 	return points
@@ -67,11 +70,11 @@ func getPointsByReceiptItems(receipt *models.Receipt) int64 {
 func getPointsByPurchaseInfo(date string, time string) int64 {
 	points := int64(0)
 	if isDateValue(date) {
-		points = getPointsByDayFromDateString(date)
+		points += getPointsByDayFromDateString(date)
 	}
 
 	if isHourValue(time) {
-		points = points + getPointsByPurchaseTime(time)
+		points += getPointsByPurchaseTime(time)
 	}
 
 	return points
@@ -81,11 +84,11 @@ func getPointsByPurchaseInfo(date string, time string) int64 {
 func getPointsByItemDescription(item models.ReceiptItem) int64 {
 	points := int64(0)
 	factor := constants.ONEFIFTH
-	println(len(strings.TrimSpace(item.ShortDescription)))
 
 	if isMultipleOf(float64(len(strings.TrimSpace(item.ShortDescription))), float64(constants.THREE)) {
 
-		if price, err := strconv.ParseFloat(item.Price, 64); err == nil {
+		price, err := strconv.ParseFloat(item.Price, 64)
+		if err == nil {
 			aux := factor * price
 			decimals := aux - math.Round(aux)
 			_points := int64(math.Round(aux))
@@ -121,28 +124,35 @@ func isDateValue(stringDate string) bool {
 
 // isHourValue checks if a string represents a valid hour.
 func isHourValue(timeString string) bool {
-	isValid := false
+
 	purchaseTime := strings.Split(timeString, ":")
-	if hour, err := strconv.Atoi(purchaseTime[0]); err == nil {
-		if minute, err := strconv.Atoi(purchaseTime[1]); err == nil {
-			isValid = (hour >= 0 && hour < 24) && (minute >= 0 && minute < 60)
-		}
+	if len(purchaseTime) != 2 {
+		return false
 	}
-	return isValid
+
+	hour, err := strconv.Atoi(purchaseTime[0])
+
+	if err != nil {
+		return false
+	}
+
+	minute, err := strconv.Atoi(purchaseTime[1])
+
+	if err != nil {
+		return false
+	}
+
+	return (hour >= 0 && hour < 24) && (minute >= 0 && minute < 60)
 }
 
 // getPointsByDayFromDateString calculates points based on the day of the purchase date.
 func getPointsByDayFromDateString(date string) int64 {
 	points := int64(0)
-	if dateParsed, err := time.Parse("2006-01-02", date); err == nil {
-		fmt.Println(dateParsed.Day())
-		/*
-		 6 points if the day in the purchase date is odd.
-		*/
-		if dateParsed.Day()%2 == 1 {
-			fmt.Println(dateParsed.Day(), "is Odd number")
-			points = int64(constants.SIX)
-		}
+
+	dateParsed, err := time.Parse("2006-01-02", date)
+
+	if err == nil && dateParsed.Day()%2 == 1 {
+		points = int64(constants.SIX)
 	}
 
 	return points
@@ -151,19 +161,23 @@ func getPointsByDayFromDateString(date string) int64 {
 // getPointsByPurchaseTime calculates points based on the purchase time.
 func getPointsByPurchaseTime(purchaseTime string) int64 {
 	points := int64(0)
-	/*
-		10 points if the time of purchase is after 2:00pm and before 4:00pm.
-	*/
+
 	timeSplit := strings.Split(purchaseTime, ":")
 
-	if hour, err := strconv.Atoi(timeSplit[0]); err == nil {
-		if minute, err := strconv.Atoi(timeSplit[1]); err == nil {
+	hour, err := strconv.Atoi(timeSplit[0])
+	if err != nil {
+		return points
+	}
 
-			if (hour >= 14 && hour <= 15) && (minute >= 0 && minute < 60) {
-				points = int64(constants.TEN)
-			}
-		}
+	minute, err := strconv.Atoi(timeSplit[1])
+	if err != nil {
+		return points
+	}
+
+	if (hour >= 14 && hour <= 15) && (minute >= 0 && minute < 60) {
+		points = int64(constants.TEN)
 	}
 
 	return points
+
 }
