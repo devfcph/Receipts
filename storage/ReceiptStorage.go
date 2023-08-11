@@ -7,14 +7,14 @@ import (
 
 // ReceiptStorage is responsible for managing receipts in memory.
 type ReceiptStorage struct {
-	receipts []*models.Receipt // A slice to hold receipt instances.
+	Receipts []*models.Receipt // A slice to hold receipt instances.
 	mutex    sync.Mutex        // Mutex to manage concurrent access.
 }
 
 // NewReceiptStorage creates a new instance of ReceiptStorage.
 func NewReceiptStorage() *ReceiptStorage {
 	return &ReceiptStorage{
-		receipts: make([]*models.Receipt, 0),
+		Receipts: make([]*models.Receipt, 0),
 	}
 }
 
@@ -23,7 +23,7 @@ func (storage *ReceiptStorage) AddReceipt(receipt *models.Receipt) {
 	storage.mutex.Lock()
 	defer storage.mutex.Unlock()
 
-	storage.receipts = append(storage.receipts, receipt)
+	storage.Receipts = append(storage.Receipts, receipt)
 }
 
 // GetAllReceipts returns all receipts stored.
@@ -31,7 +31,7 @@ func (storage *ReceiptStorage) GetAllReceipts() []*models.Receipt {
 	storage.mutex.Lock()
 	defer storage.mutex.Unlock()
 
-	return storage.receipts
+	return storage.Receipts
 }
 
 // GetReceiptById retrieves a receipt by its ID.
@@ -39,7 +39,7 @@ func (storage *ReceiptStorage) GetReceiptById(id string) *models.Receipt {
 	storage.mutex.Lock()
 	defer storage.mutex.Unlock()
 
-	for _, receipt := range storage.receipts {
+	for _, receipt := range storage.Receipts {
 		if receipt.Id == id {
 			return receipt
 		}
