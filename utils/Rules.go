@@ -11,12 +11,14 @@ import (
 	"unicode"
 )
 
+// CalculateReceiptPoints calculates the total points earned from a receipt.
 func CalculateReceiptPoints(receipt *models.Receipt) int64 {
 	totalPoints := int64(0)
 	totalPoints = getPointsByRetailerName(receipt.Retailer) + getPointsByTotal(receipt.Total) + getPointsByReceiptItems(receipt) + getPointsByPurchaseInfo(receipt.PurchaseDate, receipt.PurchaseTime)
 	return totalPoints
 }
 
+// getPointsByRetailerName calculates points based on retailer name.
 func getPointsByRetailerName(retailName string) int64 {
 	points := int64(0)
 
@@ -28,6 +30,7 @@ func getPointsByRetailerName(retailName string) int64 {
 	return points
 }
 
+// getPointsByTotal calculates points based on total amount.
 func getPointsByTotal(total string) int64 {
 
 	points := int64(0)
@@ -46,6 +49,7 @@ func getPointsByTotal(total string) int64 {
 	return points
 }
 
+// getPointsByReceiptItems calculates points based on receipt items.
 func getPointsByReceiptItems(receipt *models.Receipt) int64 {
 	points := int64(0)
 
@@ -59,6 +63,7 @@ func getPointsByReceiptItems(receipt *models.Receipt) int64 {
 	return points
 }
 
+// getPointsByPurchaseInfo calculates points based on purchase date and time.
 func getPointsByPurchaseInfo(date string, time string) int64 {
 	points := int64(0)
 	if isDateValue(date) {
@@ -72,6 +77,7 @@ func getPointsByPurchaseInfo(date string, time string) int64 {
 	return points
 }
 
+// getPointsByItemDescription calculates points based on item description.
 func getPointsByItemDescription(item models.ReceiptItem) int64 {
 	points := int64(0)
 	factor := constants.ONEFIFTH
@@ -93,10 +99,12 @@ func getPointsByItemDescription(item models.ReceiptItem) int64 {
 	return points
 }
 
+// getPointsByNumberOfItems calculates points based on the number of receipt items.
 func getPointsByNumberOfItems(totalItems int) int64 {
 	return int64((totalItems / 2) * constants.FIVE)
 }
 
+// isMultipleOf checks if a number is a multiple of another number.
 func isMultipleOf(number float64, multipleOf float64) bool {
 	if multipleOf == 0 {
 		return false
@@ -105,11 +113,13 @@ func isMultipleOf(number float64, multipleOf float64) bool {
 	return math.Mod(quotient, 1) == 0
 }
 
+// isDateValue checks if a string represents a valid date.
 func isDateValue(stringDate string) bool {
 	_, err := time.Parse("2006-01-02", stringDate)
 	return err == nil
 }
 
+// isHourValue checks if a string represents a valid hour.
 func isHourValue(timeString string) bool {
 	isValid := false
 	purchaseTime := strings.Split(timeString, ":")
@@ -121,6 +131,7 @@ func isHourValue(timeString string) bool {
 	return isValid
 }
 
+// getPointsByDayFromDateString calculates points based on the day of the purchase date.
 func getPointsByDayFromDateString(date string) int64 {
 	points := int64(0)
 	if dateParsed, err := time.Parse("2006-01-02", date); err == nil {
@@ -137,6 +148,7 @@ func getPointsByDayFromDateString(date string) int64 {
 	return points
 }
 
+// getPointsByPurchaseTime calculates points based on the purchase time.
 func getPointsByPurchaseTime(purchaseTime string) int64 {
 	points := int64(0)
 	/*

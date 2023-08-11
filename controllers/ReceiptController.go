@@ -9,22 +9,26 @@ import (
 	"net/http"
 )
 
+// ReceiptController handles HTTP requests related to receipts.
 type ReceiptController struct {
 	receiptStorage *storage.ReceiptStorage
 }
 
+// NewReceiptController creates a new instance of ReceiptController.
 func NewReceiptController(receiptStorage *storage.ReceiptStorage) *ReceiptController {
 	return &ReceiptController{
 		receiptStorage: receiptStorage,
 	}
 }
 
+// GetReceipts handles the GET request to fetch all receipts.
 func (controller ReceiptController) GetReceipts(context *gin.Context) {
 	receipts := controller.receiptStorage.GetAllReceipts()
 
 	context.IndentedJSON(http.StatusOK, receipts)
 }
 
+// GetPointsById handles the GET request to fetch points for a receipt by ID.
 func (controller ReceiptController) GetPointsById(context *gin.Context) {
 	idParam := context.Param("id")
 
@@ -40,6 +44,7 @@ func (controller ReceiptController) GetPointsById(context *gin.Context) {
 	context.IndentedJSON(http.StatusOK, newReceiptPoints)
 }
 
+// ProcessReceipt handles the POST request to process a new receipt.
 func (controller ReceiptController) ProcessReceipt(context *gin.Context) {
 	var newReceipt models.Receipt
 	var newReciptGuid models.ReceiptID

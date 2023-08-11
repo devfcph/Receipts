@@ -1,26 +1,16 @@
 package models
 
-import "encoding/json"
-
-func UnmarshalTemperatures(data []byte) (Receipt, error) {
-	var r Receipt
-	err := json.Unmarshal(data, &r)
-	return r, err
-}
-
-func (r *Receipt) Marshal() ([]byte, error) {
-	return json.Marshal(r)
-}
-
+// Receipt represents a receipt containing purchase information.
 type Receipt struct {
-	Id           string
-	Retailer     string        `json:"retailer"`
-	PurchaseDate string        `json:"purchaseDate"`
-	PurchaseTime string        `json:"purchaseTime"`
-	Items        []ReceiptItem `json:"items"`
-	Total        string        `json:"total"`
+	Id           string        // Unique identifier of the receipt.
+	Retailer     string        `json:"retailer"`     // Name of the retailer.
+	PurchaseDate string        `json:"purchaseDate"` // Date of the purchase.
+	PurchaseTime string        `json:"purchaseTime"` // Time of the purchase.
+	Items        []ReceiptItem `json:"items"`        // List of items on the receipt.
+	Total        string        `json:"total"`        // Total amount of the purchase.
 }
 
+// NewReceipt creates a new instance of Receipt.
 func NewReceipt(retailer string, purchaseDate string, purchaseTime string, items []ReceiptItem, total string) *Receipt {
 	return &Receipt{Retailer: retailer, PurchaseDate: purchaseDate, PurchaseTime: purchaseTime, Items: items, Total: total}
 }
