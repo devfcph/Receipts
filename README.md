@@ -9,7 +9,7 @@ How to run application:
    Open a terminal and navigate to a directory where you want to store your projects. Clone the project repository from wherever it's hosted (GitHub, GitLab, etc.) using a command like:
 
    ```sh
-   git clone [<repository-url>](https://github.com/devfcph/Receipts)
+   git clone https://github.com/devfcph/Receipts
    ```
 
 3. **Navigate to Project Directory**:
