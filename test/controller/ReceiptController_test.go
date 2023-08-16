@@ -39,6 +39,7 @@ func TestReceiptController_GetPointsById(t *testing.T) {
 		Items:        nil,
 		Total:        "100.00",
 	}
+
 	receiptStorage.AddReceipt(receipt)
 
 	router := gin.Default()
