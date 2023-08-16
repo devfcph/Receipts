@@ -39,7 +39,7 @@ func (controller ReceiptController) GetPointsById(context *gin.Context) {
 	}
 
 	var newReceiptPoints models.ReceiptPoints
-	newReceiptPoints.Points = utils.CalculateReceiptPoints(receipt)
+	newReceiptPoints.Points = receipt.Points
 
 	context.IndentedJSON(http.StatusOK, newReceiptPoints)
 }
@@ -58,6 +58,8 @@ func (controller ReceiptController) ProcessReceipt(context *gin.Context) {
 	newId, _ := uuid.NewUUID()
 	newReceipt.Id = newId.String()
 	newReciptGuid.ID = newReceipt.Id
+
+	newReceipt.Points = utils.CalculateReceiptPoints(&newReceipt)
 
 	controller.receiptStorage.AddReceipt(&newReceipt)
 

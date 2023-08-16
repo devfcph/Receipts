@@ -8,6 +8,7 @@ type Receipt struct {
 	PurchaseTime string        `json:"purchaseTime"` // Time of the purchase.
 	Items        []ReceiptItem `json:"items"`        // List of items on the receipt.
 	Total        string        `json:"total"`        // Total amount of the purchase.
+	Points       int64         // Points
 }
 
 // NewReceipt creates a new instance of Receipt.
