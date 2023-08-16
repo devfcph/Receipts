@@ -12,7 +12,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:9090/receipts/getAll",
+					"raw": "http://localhost:9095/receipts/getAll",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -41,7 +41,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:9090/receipts/process",
+					"raw": "http://localhost:9095/receipts/process",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -61,7 +61,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:9090/receipts/94a1e5e6-37d0-11ee-8a62-0250f2b02800/points",
+					"raw": "http://localhost:9095/receipts/94a1e5e6-37d0-11ee-8a62-0250f2b02800/points",
 					"protocol": "http",
 					"host": [
 						"localhost"

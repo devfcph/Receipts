@@ -1,6 +1,6 @@
 package config
 
-var server = "localhost:9090"     // The default server address for the application.
+var server = ":9095"              // The default server address for the application.
 var defaultEndpoint = "/receipts" // The default API endpoint for receipts.
 
 // GetServer returns the server address for the application.
