@@ -25,24 +25,24 @@ How to run application:
    Run the following command to build the Docker image from the project directory:
 
    ```sh
-   docker build -t receipt-processor .
+   docker build -t receipts_by_fcph .
    ```
 
-   This command builds an image named `receipt-processor`.
+   This command builds an image named `receipts_by_fcph`.
 
 5. **Run the Docker Container**:
 
    After the image is built, you can run a Docker container based on that image:
 
    ```sh
-   docker run -p 8080:8080 receipt-processor
+   docker run -p 9095:9095 receipts_by_fcph
    ```
 
-   This will start the container and map port 8080 from the container to port 8080 on your host machine.
+   This will start the container and map port 9095 from the container to port 9095 on your host machine.
 
 6. **Access the Application**:
 
-   Open your web browser and navigate to `http://localhost:8080`. You should see your Go application running.
+   Open your web browser and navigate to `http://localhost:9095`. You should see your Go application running.
 
 7. **Interact with the Application**:
 
@@ -56,10 +56,9 @@ How to run application:
    docker ps
    ```
 
-   This will show you a list of running containers. Identify the container ID or name associated with your `receipt-processor` container. Then, stop the container using:
+   This will show you a list of running containers. Identify the container ID or name associated with your `receipts_by_fcph` container. Then, stop the container using:
 
    ```sh
    docker stop <container-id-or-name>
    ```
 
-That's it! You've successfully set up and run your Dockerized Go application on your new environment. This approach keeps your local environment clean and isolated while allowing you to run your application consistently across different systems.
