@@ -1,4 +1,43 @@
-How to run application:
+
+# Instructions for Using the Receipts Docker Image
+
+This guide will show you how to download and run the Docker image `crishdzdev/receipts:latest` in your local environment.
+
+## Step 1: Download the Image
+
+To get started, open a terminal and execute the following command to download the image from Docker Hub:
+
+```bash
+docker pull crishdzdev/receipts:latest
+```
+
+This will download the latest version of the `crishdzdev/receipts` image from the Docker Hub repository.
+
+## Step 2: Run the Container
+
+Once the image is downloaded, you can run a container based on it. Use the following command:
+
+```bash
+docker run -p 9095:9095 crishdzdev/receipts:latest
+```
+
+This command will run a container using the downloaded image and map the internal port `9095` of the container to port `9095` on your host machine. You can access the application from your web browser or tools like Postman using `http://localhost:9095`.
+
+## Step 3: Stop and Remove the Container
+
+To stop the container, go to the terminal and press `Ctrl + C`. This will halt the running container.
+
+If you want to remove the container after stopping it, you can use the following command:
+
+```bash
+docker rm <container_id_or_name>
+```
+
+Replace `<container_id_or_name>` with the ID or name of the container you wish to remove.
+
+---
+
+# How to run application Without Downloading the Image:
 
 1. **Install Docker**:
 
@@ -62,3 +101,6 @@ How to run application:
    docker stop <container-id-or-name>
    ```
 
+Replace `<container_id_or_name>` with the ID or name of the container you wish to remove.
+
+---
