@@ -4,6 +4,7 @@ import (
 	"ReceiptProcessor/constants"
 	"ReceiptProcessor/models"
 	"math"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -25,11 +26,15 @@ func GetPointsByRetailerName(retailName string) int64 {
 	points := int64(0)
 
 	for _, char := range retailName {
-		if unicode.IsLetter(char) || unicode.IsNumber(char) {
+		if isAlphanumeric(char) {
 			points++
 		}
 	}
 	return points
+}
+
+func isAlphanumeric(character rune) bool {
+	return unicode.IsLetter(character) || unicode.IsNumber(character)
 }
 
 // GetPointsByTotal calculates points based on total amount.
@@ -56,12 +61,18 @@ func GetPointsByTotal(total string) int64 {
 // GetPointsByReceiptItems calculates points based on receipt items.
 func GetPointsByReceiptItems(receipt *models.Receipt) int64 {
 	points := int64(0)
+	var otherLst []string
 
 	points += GetPointsByNumberOfItems(len(receipt.Items))
 
 	for _, item := range receipt.Items {
+		if !slices.Contains(otherLst, item.ShortDescription) {
+			otherLst = append(otherLst, item.ShortDescription)
+		}
 		points += GetPointsByItemDescription(item)
 	}
+
+	points += int64(len(otherLst) * constants.FIVE)
 
 	return points
 }
